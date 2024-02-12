@@ -55,7 +55,7 @@ body {
 	width: 0.25rem;
 	height: 0.25rem;
 	border-radius: 100%;
-	background: #878787;
+	background: #c9c9c9;
 
 	animation-timing-function: cubic-bezier(0, 1, 1, 0);
 }
