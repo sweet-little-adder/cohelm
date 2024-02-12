@@ -2,10 +2,10 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 
 interface Props {
-	// Define prop types here
+	setApprove: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const ProcessDocument: React.FC<Props> = () => {
+const ProcessDocument: React.FC<Props> = ({ setApprove }) => {
 	const [data, setData] = useState<any>(null);
 	const [loading, setLoading] = useState<boolean>(true);
 	const [error, setError] = useState<Error | null>(null);
@@ -18,9 +18,11 @@ const ProcessDocument: React.FC<Props> = () => {
 				);
 				setData(response.data);
 			} catch (error) {
-				setError(error);
+				setError(error as Error);
 			} finally {
-				setLoading(false);
+				setTimeout(() => setLoading(false), 3000);
+				console.log("Data: ", data);
+				setTimeout(() => setApprove(true), 9000);
 			}
 		};
 
@@ -29,13 +31,42 @@ const ProcessDocument: React.FC<Props> = () => {
 
 	return (
 		<div>
-			<h1>Data Fetching Example</h1>
-			{loading && <p>Loading...</p>}
+			{loading && (
+				<div className="flex items-center">
+					{/* <p>Loading</p> */}
+					<div className="lds-ellipsis translate-x-0 my-9 mx-auto">
+						<div></div>
+						<div></div>
+						<div></div>
+						<div></div>
+					</div>
+				</div>
+			)}
 			{error && <p>Error: {error.message}</p>}
-			{data && (
+			{data && !loading && (
 				<div>
 					<p>Data:</p>
-					<pre>{JSON.stringify(data, null, 2)}</pre>
+					procedure_name: {data.procedure_name}
+					<br />
+					summary: {data.summary}
+					<br />
+					is_met: {data.is_met}
+					<br />
+					question: {data.question}
+					<br />
+					options: {data.options}
+					<br />
+					reasoning: {data.reasoning}
+					<br />
+					decision: {data.decision}
+					<br />
+					is_final: {data.is_final}
+					<br />
+					evidence: {data.evidence}
+					<br />
+					question: {data.question}
+					<br />
+					{/* <pre>{JSON.stringify(data, null, 2)}</pre> */}
 				</div>
 			)}
 		</div>

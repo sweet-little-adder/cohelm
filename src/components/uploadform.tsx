@@ -1,9 +1,9 @@
 "use client";
 import { useState, ChangeEvent, FormEvent, useEffect } from "react";
-interface MyComponentProps {
+interface Props {
 	setLoadLLM: React.Dispatch<React.SetStateAction<boolean>>;
 }
-const UploadForm: React.FC<MyComponentProps> = ({ setLoadLLM }) => {
+const UploadForm: React.FC<Props> = ({ setLoadLLM }) => {
 	const [selectedFile, setSelectedFile] = useState<File | null>(null);
 	const [loadingMedicalRecord, setLoadingMedicalRecord] = useState<
 		boolean | null
