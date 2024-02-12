@@ -1,10 +1,16 @@
 "use client";
-import { useState, ChangeEvent, FormEvent } from "react";
-
-const UploadForm: React.FC = () => {
+import { useState, ChangeEvent, FormEvent, useEffect } from "react";
+interface MyComponentProps {
+	setLoadLLM: React.Dispatch<React.SetStateAction<boolean>>;
+}
+const UploadForm: React.FC<MyComponentProps> = ({ setLoadLLM }) => {
 	const [selectedFile, setSelectedFile] = useState<File | null>(null);
-	const [loading, setLoading] = useState<number | null>(null);
-
+	const [loadingMedicalRecord, setLoadingMedicalRecord] = useState<
+		boolean | null
+	>(false);
+	const [loadingGuidelines, setLoadingGuidelines] = useState<boolean | null>(
+		false
+	);
 	const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
 		const file = event.target.files && event.target.files[0];
 		setSelectedFile(file || null);
@@ -12,8 +18,13 @@ const UploadForm: React.FC = () => {
 
 	const handleSubmit = async (event: FormEvent<HTMLFormElement>, i: number) => {
 		event.preventDefault();
+
 		if (selectedFile) {
-			setLoading(i);
+			if (i === 0) {
+				setLoadingMedicalRecord(true);
+			} else {
+				setLoadingGuidelines(true);
+			}
 			try {
 				// Simulate file upload delay
 				await new Promise((resolve) => setTimeout(resolve, 2000));
@@ -26,48 +37,65 @@ const UploadForm: React.FC = () => {
 			} catch (error) {
 				console.error("Error uploading file:", error);
 			} finally {
-				setLoading(i);
+				if (i === 0) {
+					setLoadingMedicalRecord(null);
+				} else {
+					setLoadingGuidelines(null);
+				}
 			}
 		}
 	};
-
+	useEffect(() => {
+		if (loadingMedicalRecord === null && loadingGuidelines === null) {
+			setLoadLLM(true);
+		}
+	}, [loadingMedicalRecord, loadingGuidelines]);
 	return (
 		<div className="flex-col text-[#343541] space-y-5">
 			<p>Medical record</p>
 			<form
-				// onSubmit={handleSubmit}
+				onSubmit={(e) => handleSubmit(e, 0)}
 				className="flex items-center justify-between text-[#9e9e9e] pb-5 flex-wrap border-b-[1px] "
 			>
 				<input type="file" onChange={handleFileChange} />
 				<div className="flex items-center">
 					<button
-						onClick={(e)=>handleSubmit(e,1)}
 						type="submit"
-						className="my-2 text-[#9e9e9e]  px-3 py-1 rounded-lg shadow-md/ shadow-[inset_0_-1px_2.5px_rgba(0,0,0,0.2)] inset-drop-shadow hover:bg-[#049E67] hover:text-white transition-colors duration-300 ease-in-out"
+						className={`my-2 text-[#9e9e9e]  px-3 py-1 rounded-lg shadow-md/ shadow-[inset_0_-1px_2.5px_rgba(0,0,0,0.2)] inset-drop-shadow hover:bg-[#049E67] ${
+							loadingMedicalRecord === null
+								? "bg-[#049E67] text-white shadow-none"
+								: "bg-white"
+						} hover:text-white transition-colors duration-300 ease-in-out`}
 					>
-						{loading ? "Uploading..." : "Upload"}
+						{loadingMedicalRecord
+							? "Uploading..."
+							: loadingMedicalRecord === null
+							? "Uploaded!"
+							: "Upload"}
 					</button>
-					{loading && (
-						<div className="w-5 h-5 border-t-2 border-b-5 border-[#ff0000] rounded-full animate-spin"></div>
-					)}
 				</div>
 			</form>
 			<p>Guidelines</p>
 			<form
-				// onSubmit={handleSubmit}
-				className="flex items-center justify-between text-[#9e9e9e] gap-5 flex-wrap "
+				onSubmit={(e) => handleSubmit(e, 1)}
+				className="flex items-center justify-between text-[#9e9e9e] flex-wrap "
 			>
 				<input type="file" onChange={handleFileChange} />
 				<div className="flex items-center">
 					<button
 						type="submit"
-						className="my-2 text-[#9e9e9e] bg-[#] px-3 py-1 rounded-lg shadow-md/ shadow-[inset_0_-1px_2.5px_rgba(0,0,0,0.2)] inset-drop-shadow hover:bg-[#049E67] hover:text-white transition-colors duration-300 ease-in-out"
+						className={`my-2 text-[#9e9e9e]  px-3 py-1 rounded-lg shadow-md/ shadow-[inset_0_-1px_2.5px_rgba(0,0,0,0.2)] inset-drop-shadow hover:bg-[#049E67] ${
+							loadingGuidelines === null
+								? "bg-[#049E67] text-white shadow-none"
+								: "bg-white"
+						} hover:text-white transition-colors duration-300 ease-in-out`}
 					>
-						{loading ? "Uploading..." : "Upload"}
+						{loadingGuidelines
+							? "Uploading..."
+							: loadingGuidelines === null
+							? "Uploaded!"
+							: "Upload"}
 					</button>
-					{loading && (
-						<div className="w-5 h-5 border-t-2 border-b-5 border-[#ff006d] rounded-full animate-spin"></div>
-					)}
 				</div>
 			</form>
 		</div>
