@@ -32,10 +32,21 @@ const ProcessDocument: React.FC<Props> = ({ setApprove }) => {
 	useEffect(() => {
 		if (data !== null) {
 			console.log("Data: ", data);
-			setTimeout(() => setApprove(data.is_met), 3000);
+			setTimeout(() => setApprove(data.is_met), 9000);
 		}
 	}, [data]);
+	const steps = ["Step 1", "Step 2", "Step 3", "Step 4"];
+	const [currentStepIndex, setCurrentStepIndex] = useState(0);
 
+	useEffect(() => {
+		const timeout = setTimeout(() => {
+			if (currentStepIndex < steps.length - 1) {
+				setCurrentStepIndex(currentStepIndex + 1);
+			}
+		}, 2000);
+
+		return () => clearTimeout(timeout);
+	}, [currentStepIndex, steps.length]);
 	return (
 		<div>
 			{console.log("Data: ", data)}
@@ -65,13 +76,44 @@ const ProcessDocument: React.FC<Props> = ({ setApprove }) => {
 							{expanded ? `[collapse]` : `[...]`}
 						</span>
 					</div>
-					<div className="border-b-[1px] pb-5">
-						Does the patient meet requirement: {data.is_met ? "Yes" : "No"}
+					<div className="border-b-[1px] pb-5 text-sm space-y-3">
+						<p>Does the patient meet requirement:</p>
+						<div className="text-[#4a4a4a]">{data.is_met ? "Yes" : "No"}</div>
 					</div>
-					<div className="border-b-[1px] pb-5">question: {data.question}</div>
-					<div className="border-b-[1px] pb-5">options: {data.options}</div>
-					<div className="">reasoning: {data.reasoning}</div>
-					{/* <div className="">decision: {data.decision}</div> */}
+
+					{steps.slice(0, currentStepIndex + 1).map((step, index) => (
+						<div
+							key={index}
+							className={`pb-5 space-y-3 ${
+								index !== steps.length - 1 ? "border-b" : ""
+							}`}
+						>
+							<div>{step}</div>
+							{/* {index === currentStepIndex && ( */}
+							<div className="space-y-3">
+								<div>{data.steps[index].question}</div>
+								<div className="space-y-3 flex-col justify-center items-center">
+									{data.steps[index].options.map(
+										(option: any, index: number) => (
+											<div key={index} className="flex gap-3 items-center">
+												<div className="transition-all cursor-pointer hover:bg-[#049E67] hover:text-white bg-[#ccc]/50 p-2 rounded-full w-8 h-8 text-sm text-center flex justify-center items-center">
+													{option["key"]}
+												</div>
+												<div className="text-sm text-[#4a4a4a] tracking-wide">
+													{option["text"]}
+												</div>
+												{/* {key.map((k: string, i: number) => (
+												<div key={i}>{k}</div>
+											))} */}
+												{/* {data.steps[currentStepIndex].options[key]} */}
+											</div>
+										)
+									)}
+								</div>
+							</div>
+							{/* )} */}
+						</div>
+					))}
 				</div>
 			)}
 		</div>
