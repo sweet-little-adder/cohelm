@@ -43,7 +43,7 @@ const ProcessDocument: React.FC<Props> = ({ setApprove }) => {
 			if (currentStepIndex < steps.length - 1) {
 				setCurrentStepIndex(currentStepIndex + 1);
 			}
-		}, 2000);
+		}, 2800);
 
 		return () => clearTimeout(timeout);
 	}, [currentStepIndex, steps.length]);
@@ -77,7 +77,7 @@ const ProcessDocument: React.FC<Props> = ({ setApprove }) => {
 						</span>
 					</div>
 					<div className="border-b-[1px] pb-5 text-sm space-y-3">
-						<p>Does the patient meet requirement:</p>
+						<p>Is the requirements for the case been met:</p>
 						<div className="text-[#4a4a4a]">{data.is_met ? "Yes" : "No"}</div>
 					</div>
 
@@ -91,7 +91,7 @@ const ProcessDocument: React.FC<Props> = ({ setApprove }) => {
 							<div>{step}</div>
 							{/* {index === currentStepIndex && ( */}
 							<div className="space-y-3">
-								<div>{data.steps[index].question}</div>
+								<div className="text-sm">{data.steps[index].question}</div>
 								<div className="space-y-3 flex-col justify-center items-center">
 									{data.steps[index].options.map(
 										(option: any, index: number) => (
@@ -102,6 +102,25 @@ const ProcessDocument: React.FC<Props> = ({ setApprove }) => {
 												<div className="text-sm text-[#4a4a4a] tracking-wide">
 													{option["text"]}
 												</div>
+											</div>
+										)
+									)}
+								</div>
+								<div className="text-xs">
+									List of evidence found in the medical record to support the
+									option selected by the AI at each step. This list of evidence
+									is generated using RAG (Retrieval Augmented Generation
+								</div>
+								<div className="text-xs space-y-3">
+									{data.steps[index].evidence.map(
+										(ev: any, evIndex: number) => (
+											<div
+												key={evIndex}
+												className={`p-3 rounded-sm
+													${evIndex % 2 === 0 ? "bg-white" : "bg-gray-100"}
+												`}
+											>
+												{ev.content}
 											</div>
 										)
 									)}
