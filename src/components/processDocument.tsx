@@ -102,10 +102,6 @@ const ProcessDocument: React.FC<Props> = ({ setApprove }) => {
 												<div className="text-sm text-[#4a4a4a] tracking-wide">
 													{option["text"]}
 												</div>
-												{/* {key.map((k: string, i: number) => (
-												<div key={i}>{k}</div>
-											))} */}
-												{/* {data.steps[currentStepIndex].options[key]} */}
 											</div>
 										)
 									)}
