@@ -61,7 +61,7 @@ const UploadForm: React.FC<Props> = ({ setLoadLLM }) => {
 				<div className="flex items-center">
 					<button
 						type="submit"
-						className={`my-2 text-[#9e9e9e]  px-3 py-1 rounded-lg shadow-md/ shadow-[inset_0_-1px_2.5px_rgba(0,0,0,0.2)] inset-drop-shadow hover:bg-[#049E67] ${
+						className={`my-2 text-[#9e9e9e] text-sm px-3 py-1 rounded-lg shadow-[inset_0_-1px_2.5px_rgba(0,0,0,0.2)] inset-drop-shadow hover:bg-[#049E67] ${
 							loadingMedicalRecord === null
 								? "bg-[#049E67] text-white shadow-none"
 								: "bg-white"
@@ -84,7 +84,7 @@ const UploadForm: React.FC<Props> = ({ setLoadLLM }) => {
 				<div className="flex items-center">
 					<button
 						type="submit"
-						className={`my-2 text-[#9e9e9e]  px-3 py-1 rounded-lg shadow-md/ shadow-[inset_0_-1px_2.5px_rgba(0,0,0,0.2)] inset-drop-shadow hover:bg-[#049E67] ${
+						className={`my-2 text-[#9e9e9e] text-sm px-3 py-1 rounded-lg  shadow-[inset_0_-1px_2.5px_rgba(0,0,0,0.2)] inset-drop-shadow hover:bg-[#049E67] ${
 							loadingGuidelines === null
 								? "bg-[#049E67] text-white shadow-none"
 								: "bg-white"
